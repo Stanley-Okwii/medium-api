@@ -1,7 +1,7 @@
 from rest_framework import serializers
 
 from .models import Article
-
+from .models import Author
 
 class ArticleSerializer(serializers.Serializer):
     title = serializers.CharField(max_length=120)
@@ -34,3 +34,19 @@ class ArticleSerializer(serializers.Serializer):
         article = get_object_or_404(Article.objects.all(), pk=pk)
         article.delete()
         return Response({"message": "Article with id `{}` has been deleted.".format(pk)},status=204)
+
+class AuthorSerializer(serializers.Serializer):
+    name = serializers.CharField(max_length=120)
+    email = serializers.EmailField()
+    password = serializers.CharField()
+
+    def create(self, validated_data):
+        return Author.objects.create(**validated_data)
+
+    def update(self, instance, validated_data):
+        instance.name = validated_data.get('name', instance.name)
+        instance.email = validated_data.get('email', instance.email)
+        instance.password = validated_data.get('password', instance.password)
+
+        instance.save()
+        return instance

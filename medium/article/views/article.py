@@ -1,8 +1,8 @@
 from rest_framework.response import Response
 from rest_framework.views import APIView
 
-from .models import Article
-from .serializers import ArticleSerializer
+from article.models import Article
+from article.serializers import ArticleSerializer
 
 class ArticleView(APIView):
     def get(self, request):
