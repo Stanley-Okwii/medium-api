@@ -1,12 +1,16 @@
 from django.db import models
+from django.contrib.auth.models import User
+from django.contrib.auth.models import AbstractUser
 
-class Author(models.Model):
-  name = models.CharField(max_length=255)
-  email = models.EmailField()
-  password = models.CharField(max_length=25)
+class Author(AbstractUser):
+  username = models.CharField(blank=True, null=True, max_length=10)
+  email = models.EmailField(('email address'), unique=True)
+
+  USERNAME_FIELD = 'email'
+  REQUIRED_FIELDS = ['username', 'first_name', 'last_name']
 
   def __str__(self):
-    return self.name
+    return self.username
 
 class Article(models.Model):
   title = models.CharField(max_length=120)

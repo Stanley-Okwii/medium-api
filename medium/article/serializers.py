@@ -36,7 +36,9 @@ class ArticleSerializer(serializers.Serializer):
         return Response({"message": "Article with id `{}` has been deleted.".format(pk)},status=204)
 
 class AuthorSerializer(serializers.Serializer):
-    name = serializers.CharField(max_length=120)
+    username = serializers.CharField(max_length=120)
+    first_name = serializers.CharField(max_length=120)
+    last_name = serializers.CharField(max_length=120)
     email = serializers.EmailField()
     password = serializers.CharField()
 
@@ -44,9 +46,15 @@ class AuthorSerializer(serializers.Serializer):
         return Author.objects.create(**validated_data)
 
     def update(self, instance, validated_data):
-        instance.name = validated_data.get('name', instance.name)
+        instance.username = validated_data.get('username', instance.username)
         instance.email = validated_data.get('email', instance.email)
         instance.password = validated_data.get('password', instance.password)
+        instance.last_name = validated_data.get('last_name', instance.last_name)
+        instance.first_name = validated_data.get('first_name', instance.first_name)
 
         instance.save()
         return instance
+
+class TokenSerializer(serializers.Serializer):
+    token = serializers.CharField(max_length=255)
+    message = serializers.CharField(max_length=100)
